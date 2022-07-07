@@ -31,6 +31,7 @@ namespace MS.SaasCore.Internal
 
         public async Task Invoke(HttpContext context)
         {
+            if (context == null) return;
             Ensure.Argument.NotNull(context, nameof(context));
 
             var tenantContext = context.GetTenantContext<TTenant>();

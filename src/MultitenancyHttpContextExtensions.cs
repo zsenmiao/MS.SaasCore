@@ -19,6 +19,7 @@ namespace MS.SaasCore
 
         public static TenantContext<TTenant> GetTenantContext<TTenant>(this HttpContext context)
         {
+            if (context == null) return null;
             Ensure.Argument.NotNull(context, nameof(context));
 
             object tenantContext;

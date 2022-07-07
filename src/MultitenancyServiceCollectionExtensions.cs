@@ -19,7 +19,21 @@ namespace MS.SaasCore
 
             // Make Tenant and TenantContext injectable
             services.AddScoped(prov => prov.GetService<IHttpContextAccessor>()?.HttpContext.GetTenantContext<TTenant>());
-            services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant);
+            services.AddScoped(prov => {
+                try
+                {
+                    var context = prov?.GetService<TenantContext<TTenant>>();
+                    if (context != null)
+                    {
+                        return context.Tenant;
+                    }
+                    return null;
+                }
+                catch (System.Exception)
+                {
+                    return null;
+                }
+            });
 
             // Make ITenant injectable for handling null injection, similar to IOptions
             services.AddScoped<ITenant<TTenant>>(prov => new TenantWrapper<TTenant>(prov.GetService<TTenant>()));
